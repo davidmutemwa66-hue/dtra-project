@@ -7,362 +7,125 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --primary: #1A3C5E;
-    --primary-light: #2E6EA6;
-    --accent: #1E8449;
-    --accent-light: #27AE60;
-    --amber: #D4851A;
-    --bg: #F8F9FA;
-    --surface: #FFFFFF;
-    --border: #DEE2E6;
-    --text: #1A1A2E;
-    --text-muted: #6C757D;
-    --danger: #C0392B;
-    --radius: 10px;
+    --primary: #1A3C5E; --primary-light: #2E6EA6; --accent: #1E8449;
+    --accent-light: #27AE60; --amber: #D4851A; --bg: #F8F9FA;
+    --surface: #FFFFFF; --border: #DEE2E6; --text: #1A1A2E;
+    --text-muted: #6C757D; --danger: #C0392B; --radius: 10px;
     --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
 
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-
-  /* Header */
-  .header {
-    background: var(--primary);
-    color: white;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
+  .header { background: var(--primary); color: white; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
   .header-logo { display: flex; align-items: center; gap: 12px; }
-  .header-icon {
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .header-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
   .header-icon svg { width: 20px; height: 20px; fill: white; }
-  .header-title { font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+  .header-title { font-size: 15px; font-weight: 600; }
   .header-sub { font-size: 11px; opacity: 0.7; }
-  .header-badge {
-    font-size: 11px;
-    background: rgba(255,255,255,0.15);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.2);
-  }
+  .header-badge { font-size: 11px; background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
 
-  /* Main */
   .main { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
-  /* Screen management */
   .screen { display: none; }
   .screen.active { display: block; }
 
-  /* Welcome screen */
-  .welcome-hero {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    text-align: center;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-  .welcome-icon {
-    width: 72px; height: 72px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    border-radius: 20px;
-    display: inline-flex; align-items: center; justify-content: center;
-    margin-bottom: 1.25rem;
-  }
+  /* Welcome */
+  .welcome-hero { background: var(--surface); border-radius: 16px; padding: 3rem 2.5rem; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .welcome-icon { width: 72px; height: 72px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
   .welcome-icon svg { width: 40px; height: 40px; fill: white; }
   .welcome-hero h1 { font-size: 26px; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
   .welcome-hero p { color: var(--text-muted); font-size: 15px; max-width: 520px; margin: 0 auto 1.75rem; }
-
-  .info-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 2rem;
-  }
-  .info-card {
-    background: #F0F4F8;
-    border-radius: var(--radius);
-    padding: 1rem;
-    text-align: center;
-  }
+  .info-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+  .info-card { background: #F0F4F8; border-radius: var(--radius); padding: 1rem; text-align: center; }
   .info-card .val { font-size: 24px; font-weight: 700; color: var(--primary); }
   .info-card .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
   .dim-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 2rem; }
-  .dim-tag {
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
+  .dim-tag { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 500; }
 
   /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 28px;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-decoration: none;
-  }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
   .btn-primary { background: var(--primary); color: white; }
-  .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,60,94,0.3); }
-  .btn-accent { background: var(--accent); color: white; }
-  .btn-accent:hover { background: var(--accent-light); }
-  .btn-outline {
-    background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
-  }
+  .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
   .btn-outline:hover { background: var(--primary); color: white; }
-  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
   .btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-  /* Progress bar */
+  /* Org info form */
+  .form-card { background: var(--surface); border-radius: 16px; padding: 2rem 2.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .form-card h2 { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+  .form-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px; }
+  .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: white; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .required { color: var(--danger); }
+  .error-box { display: none; background: #FDEDEC; color: var(--danger); padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 1rem; }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.75rem; }
+
+  /* Progress */
   .progress-wrap { margin-bottom: 1.75rem; }
   .progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .progress-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
   .progress-step { font-size: 13px; color: var(--primary); font-weight: 700; }
-  .progress-bar-track {
-    height: 6px;
-    background: #E9ECEF;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
+  .progress-bar-track { height: 6px; background: #E9ECEF; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 3px; transition: width 0.4s ease; }
 
   /* Dimension header */
-  .dim-header {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid var(--primary);
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .dim-number {
-    width: 40px; height: 40px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
+  .dim-header { background: var(--surface); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; border-left: 4px solid var(--primary); box-shadow: var(--shadow); display: flex; align-items: center; gap: 1rem; }
+  .dim-number { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
   .dim-header h2 { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
   .dim-header p { font-size: 13px; color: var(--text-muted); }
 
-  /* Question card */
-  .question-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
-    transition: border-color 0.2s;
-  }
+  /* Question cards */
+  .question-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 10px; border: 1px solid var(--border); transition: border-color 0.2s; }
   .question-card.answered { border-color: var(--accent); }
-  .question-text {
-    font-size: 14px;
-    color: var(--text);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
+  .question-text { font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
   .question-num { font-weight: 700; color: var(--primary-light); }
-
-  /* Likert scale */
-  .likert {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-  }
+  .likert { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
   .likert-opt { position: relative; }
   .likert-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .likert-opt label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 4px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-  }
+  .likert-opt label { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; text-align: center; }
   .likert-opt label:hover { border-color: var(--primary-light); background: #F0F7FF; }
   .likert-opt input:checked + label { border-color: var(--primary); background: #E8F1FA; }
-  .likert-opt .score-num {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-muted);
-    line-height: 1;
-  }
+  .score-num { font-size: 18px; font-weight: 700; color: var(--text-muted); line-height: 1; }
   .likert-opt input:checked + label .score-num { color: var(--primary); }
-  .likert-opt .score-lbl { font-size: 10px; color: var(--text-muted); line-height: 1.2; }
-
-  /* Nav buttons */
-  .nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.5rem;
-  }
+  .score-lbl { font-size: 10px; color: var(--text-muted); line-height: 1.2; }
 
   /* Results */
-  .results-header {
-    background: var(--primary);
-    color: white;
-    border-radius: 16px;
-    padding: 2rem 2rem 1.75rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    box-shadow: var(--shadow);
-  }
+  .save-status { display: none; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; }
+  .results-header { background: var(--primary); color: white; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: var(--shadow); }
   .results-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 0.25rem; }
   .results-header p { font-size: 14px; opacity: 0.8; }
-
-  .score-display {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255,255,255,0.12);
-    border-radius: 16px;
-    padding: 1rem 2rem;
-    margin-top: 1rem;
-    border: 1px solid rgba(255,255,255,0.2);
-  }
+  .score-display { display: inline-flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.12); border-radius: 16px; padding: 1rem 2rem; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.2); }
   .score-number { font-size: 48px; font-weight: 800; line-height: 1; }
   .score-label { font-size: 12px; opacity: 0.7; margin-top: 4px; }
-  .score-tier {
-    margin-top: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 4px 16px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.2);
-  }
-
+  .score-tier { margin-top: 8px; font-size: 14px; font-weight: 600; padding: 4px 16px; border-radius: 20px; background: rgba(255,255,255,0.2); }
   .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
   @media (max-width: 580px) { .results-grid { grid-template-columns: 1fr; } }
-
-  .chart-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
+  .chart-card { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); }
   .card-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
-
-  /* Dimension scores */
-  .dim-score-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .dim-score-name { font-size: 13px; font-weight: 500; flex: 1; color: var(--text); }
+  .dim-score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .dim-score-name { font-size: 13px; font-weight: 500; flex: 1; }
   .dim-score-bar-track { flex: 2; height: 8px; background: #E9ECEF; border-radius: 4px; overflow: hidden; }
   .dim-score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
   .dim-score-pct { font-size: 12px; font-weight: 700; min-width: 36px; text-align: right; }
-
-  /* Recommendations */
-  .reco-section { margin-bottom: 1.5rem; }
-  .reco-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-  }
-  .reco-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .reco-badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .reco-dim-name { font-size: 15px; font-weight: 700; color: var(--primary); }
-  .reco-score { font-size: 12px; color: var(--text-muted); margin-left: auto; }
-  .reco-items { list-style: none; }
-  .reco-items li {
-    font-size: 13px;
-    color: var(--text);
-    padding: 5px 0;
-    padding-left: 18px;
-    position: relative;
-    border-bottom: 1px solid #F0F0F0;
-    line-height: 1.5;
-  }
-  .reco-items li:last-child { border-bottom: none; }
-  .reco-items li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
-
-  /* Actions */
-  .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
-
-  /* Framework section */
-  .framework-section {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-  .framework-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 1rem;
-  }
-  .fw-pillar {
-    border-radius: 8px;
-    padding: 12px;
-    text-align: center;
-  }
+  .framework-section { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 1rem; }
+  .fw-pillar { border-radius: 8px; padding: 12px; text-align: center; }
   .fw-pillar .fw-icon { font-size: 22px; margin-bottom: 6px; }
   .fw-pillar .fw-name { font-size: 12px; font-weight: 600; }
   .fw-pillar .fw-pct { font-size: 16px; font-weight: 800; margin-top: 4px; }
-
-  /* Print */
-  @media print {
-    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .btn, .actions-row { display: none; }
-    .screen { display: block !important; }
-    #screen-welcome, #screen-assess { display: none !important; }
-  }
+  .reco-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 10px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .reco-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .reco-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; }
+  .reco-dim-name { font-size: 15px; font-weight: 700; color: var(--primary); }
+  .reco-score { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+  .reco-items { list-style: none; }
+  .reco-items li { font-size: 13px; color: var(--text); padding: 5px 0 5px 18px; position: relative; border-bottom: 1px solid #F0F0F0; line-height: 1.5; }
+  .reco-items li:last-child { border-bottom: none; }
+  .reco-items li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
 </style>
 </head>
 <body>
@@ -390,14 +153,12 @@
       </div>
       <h1>Digital Transformation Readiness Assessment</h1>
       <p>Evaluate your organisation's digital maturity across five critical dimensions and receive a personalised readiness score with tailored recommendations.</p>
-
       <div class="info-cards">
         <div class="info-card"><div class="val">25</div><div class="lbl">Questions</div></div>
         <div class="info-card"><div class="val">5</div><div class="lbl">Dimensions</div></div>
         <div class="info-card"><div class="val">~10</div><div class="lbl">Minutes</div></div>
         <div class="info-card"><div class="val">Free</div><div class="lbl">No Sign-up</div></div>
       </div>
-
       <div class="dim-tags">
         <span class="dim-tag" style="background:#EBF5FB;color:#1A5276;">🖥 Technology</span>
         <span class="dim-tag" style="background:#EAF7F0;color:#145A32;">📋 Strategy</span>
@@ -405,78 +166,72 @@
         <span class="dim-tag" style="background:#F9EBEA;color:#78281F;">🔄 Culture</span>
         <span class="dim-tag" style="background:#F4ECF7;color:#4A235A;">🎓 Skills</span>
       </div>
-
-      <button class="btn btn-primary" onclick="startAssessment()">
+      <button class="btn btn-primary" onclick="showScreen('screen-orginfo')">
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         Begin Assessment
       </button>
     </div>
-
-    <div style="background:var(--surface); border-radius:var(--radius); padding:1.25rem 1.5rem; border:1px solid var(--border); font-size:13px; color:var(--text-muted); text-align:center;">
-      <strong style="color:var(--text);">Instructions:</strong> For each statement, select the response that best reflects your organisation's current situation. There are no right or wrong answers. Be as honest as possible for the most accurate results.
+    <div style="background:var(--surface);border-radius:var(--radius);padding:1.25rem 1.5rem;border:1px solid var(--border);font-size:13px;color:var(--text-muted);text-align:center;">
+      <strong style="color:var(--text);">Instructions:</strong> For each statement, select the response that best reflects your organisation's current situation. Be as honest as possible for the most accurate results.
     </div>
   </div>
 
-  <!-- SCREEN 1B: ORG INFO -->
+  <!-- SCREEN 2: ORG INFO -->
   <div id="screen-orginfo" class="screen">
-    <div style="background:var(--surface);border-radius:16px;padding:2rem 2.5rem;box-shadow:var(--shadow);border:1px solid var(--border);">
-      <h2 style="font-size:20px;font-weight:700;color:var(--primary);margin-bottom:0.5rem;">About Your Organisation</h2>
-      <p style="font-size:14px;color:var(--text-muted);margin-bottom:1.5rem;">This information helps contextualise your results and contributes to research on digital transformation in Zambia. All data is stored securely.</p>
-
-      <div style="display:grid;gap:1rem;">
-        <div>
-          <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">Organisation Name <span style="color:var(--danger);">*</span></label>
-          <input type="text" id="f-org" placeholder="e.g. Zambia Revenue Authority" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;">
+    <div class="form-card">
+      <h2>About Your Organisation</h2>
+      <p>This information helps contextualise your results and contributes to research on digital transformation in Zambia. All data is stored securely.</p>
+      <div class="form-group">
+        <label>Organisation Name <span class="required">*</span></label>
+        <input type="text" id="f-org" placeholder="e.g. Zambia Revenue Authority">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name <span class="required">*</span></label>
+          <input type="text" id="f-name" placeholder="Full name">
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div>
-            <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">Your Name <span style="color:var(--danger);">*</span></label>
-            <input type="text" id="f-name" placeholder="Full name" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;">
-          </div>
-          <div>
-            <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">Your Role</label>
-            <input type="text" id="f-role" placeholder="e.g. IT Manager" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;">
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div>
-            <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">Sector</label>
-            <select id="f-sector" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:white;">
-              <option>Banking & Finance</option>
-              <option>Healthcare</option>
-              <option>Education</option>
-              <option>Government / Public Sector</option>
-              <option>Agriculture</option>
-              <option>Mining</option>
-              <option>Retail & Commerce</option>
-              <option>Telecommunications</option>
-              <option>Manufacturing</option>
-              <option>NGO / Non-Profit</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div>
-            <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">Organisation Size</label>
-            <select id="f-size" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:white;">
-              <option>1–10 employees</option>
-              <option>11–50 employees</option>
-              <option>51–200 employees</option>
-              <option>201–500 employees</option>
-              <option>500+ employees</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label>Your Role</label>
+          <input type="text" id="f-role" placeholder="e.g. IT Manager">
         </div>
       </div>
-
-      <div id="orginfo-error" style="display:none;background:#FDEDEC;color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;margin-top:1rem;"></div>
-
-      <div style="display:flex;justify-content:space-between;margin-top:1.75rem;">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sector</label>
+          <select id="f-sector">
+            <option>Banking & Finance</option>
+            <option>Healthcare</option>
+            <option>Education</option>
+            <option>Government / Public Sector</option>
+            <option>Agriculture</option>
+            <option>Mining</option>
+            <option>Retail & Commerce</option>
+            <option>Telecommunications</option>
+            <option>Manufacturing</option>
+            <option>NGO / Non-Profit</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Organisation Size</label>
+          <select id="f-size">
+            <option>1–10 employees</option>
+            <option>11–50 employees</option>
+            <option>51–200 employees</option>
+            <option>201–500 employees</option>
+            <option>500+ employees</option>
+          </select>
+        </div>
+      </div>
+      <div class="error-box" id="orginfo-error"></div>
+      <div class="nav-row">
         <button class="btn btn-outline" onclick="showScreen('screen-welcome')">← Back</button>
         <button class="btn btn-primary" onclick="submitOrgInfo()">Start Assessment →</button>
       </div>
     </div>
   </div>
 
+  <!-- SCREEN 3: ASSESSMENT -->
   <div id="screen-assess" class="screen">
     <div class="progress-wrap">
       <div class="progress-info">
@@ -487,357 +242,166 @@
         <div class="progress-bar-fill" id="progress-fill" style="width:20%"></div>
       </div>
     </div>
-
-    <div class="dim-header">
+    <div class="dim-header" id="dim-header">
       <div class="dim-number" id="dim-number">1</div>
       <div>
         <h2 id="dim-name">Technology Infrastructure</h2>
         <p id="dim-desc">Assessing your organisation's digital tools, systems, and infrastructure</p>
       </div>
     </div>
-
     <div id="questions-container"></div>
-
     <div class="nav-row">
-      <button class="btn btn-outline" id="btn-back" onclick="prevDim()" style="display:none;">
-        ← Back
-      </button>
+      <button class="btn btn-outline" id="btn-back" onclick="prevDim()" style="display:none;">← Back</button>
       <span></span>
-      <button class="btn btn-primary" id="btn-next" onclick="nextDim()">
-        Next →
-      </button>
+      <button class="btn btn-primary" id="btn-next" onclick="nextDim()">Next →</button>
     </div>
   </div>
 
-  <!-- SCREEN 3: RESULTS -->
+  <!-- SCREEN 4: RESULTS -->
   <div id="screen-results" class="screen">
-    <div id="save-status" style="display:none;text-align:center;padding:10px;border-radius:8px;font-size:13px;margin-bottom:1rem;"></div>
-
+    <div class="save-status" id="save-status"></div>
     <div class="results-header">
       <h2>Your Digital Transformation Readiness Report</h2>
-      <p id="org-name-display">Assessment completed — <span id="result-date"></span></p>
+      <p id="org-name-display">Assessment completed</p>
       <div class="score-display">
         <div class="score-number" id="total-score-display">0</div>
         <div class="score-label">Overall Score (out of 125)</div>
         <div class="score-tier" id="tier-display">Loading…</div>
       </div>
     </div>
-
     <div class="results-grid">
-      <!-- Radar chart -->
       <div class="chart-card">
         <div class="card-title">Dimension Radar</div>
-        <div style="position:relative; width:100%; height:260px;">
-          <canvas id="radarChart" role="img" aria-label="Radar chart showing scores across five digital transformation dimensions"></canvas>
+        <div style="position:relative;width:100%;height:260px;">
+          <canvas id="radarChart"></canvas>
         </div>
       </div>
-
-      <!-- Dimension bar scores -->
       <div class="chart-card">
         <div class="card-title">Dimension Breakdown</div>
         <div id="dim-bars"></div>
       </div>
     </div>
-
-    <!-- Framework overview -->
     <div class="framework-section">
-      <div class="card-title">Zambian Digital Transformation Framework (ZDTF) — Your Position</div>
+      <div class="card-title">ZDTF Framework — Your Position</div>
       <div class="framework-grid" id="fw-grid"></div>
     </div>
-
-    <!-- Recommendations -->
-    <div class="reco-section">
-      <h3 style="font-size:16px; font-weight:700; color:var(--primary); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em;">Tailored Recommendations</h3>
-      <div id="recommendations"></div>
-    </div>
-
+    <div id="recommendations"></div>
     <div class="actions-row">
-      <button class="btn btn-primary" onclick="window.print()">
-        <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-        Print Report
-      </button>
-      <button class="btn btn-outline" onclick="resetAssessment()">
-        ↺ Retake Assessment
-      </button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print Report</button>
+      <button class="btn btn-outline" onclick="resetAssessment()">↺ Retake Assessment</button>
     </div>
   </div>
 
 </main>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────────────────
-// After deploying your backend to Render, paste its URL here:
-// e.g. 'https://dtra-api.onrender.com'
+// ── CONFIG ──────────────────────────────────────────────────────────────────
 const API_URL = 'https://dtra-api.onrender.com';
-// ───────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────────────────
 
 const DIMS = [
   {
-    id: 'technology',
-    name: 'Technology Infrastructure',
+    id: 'technology', name: 'Technology Infrastructure', icon: '🖥',
     desc: 'Assessing digital tools, systems, connectivity, and data capabilities',
-    color: '#1A5276',
-    bg: '#EBF5FB',
-    icon: '🖥',
+    color: '#1A5276', bg: '#EBF5FB',
     questions: [
       'Our organisation has reliable internet connectivity and digital infrastructure.',
-      'We use cloud-based services (e.g., email, storage, or software platforms) for core business operations.',
+      'We use cloud-based services for core business operations.',
       'Our IT systems are integrated and can share data effectively across departments.',
-      'We have cybersecurity measures in place, such as access controls, data backups, and firewalls.',
-      'We use data analytics, dashboards, or reporting tools to support business decision-making.'
+      'We have cybersecurity measures in place such as access controls and data backups.',
+      'We use data analytics or reporting tools to support business decision-making.'
     ],
     recos: {
-      low: [
-        'Prioritise investment in basic ICT infrastructure including reliable internet connectivity and power backup.',
-        'Explore mobile-first solutions suited to Zambia\'s connectivity environment (e.g., USSD, mobile data).',
-        'Begin with low-cost cloud services such as Google Workspace or Microsoft 365 for collaboration.',
-        'Conduct an ICT audit to map current infrastructure gaps and prioritise investments.',
-        'Engage with ZICTA\'s digital inclusion programmes and government fibre rollout initiatives.'
-      ],
-      mid: [
-        'Develop a cloud migration roadmap to move critical systems to scalable cloud platforms.',
-        'Implement a basic cybersecurity framework including regular backups and staff password hygiene training.',
-        'Invest in system integration tools (APIs) to connect existing siloed platforms.',
-        'Introduce a business intelligence tool to enable data-driven reporting across departments.',
-        'Consider managed IT services to supplement internal capacity at lower cost.'
-      ],
-      high: [
-        'Explore advanced technologies such as AI-powered analytics and IoT for operational efficiency.',
-        'Implement Zero Trust security architecture and regular penetration testing.',
-        'Leverage big data platforms for real-time operational insights and predictive analytics.',
-        'Adopt DevOps or Agile IT delivery practices to accelerate technology deployment.',
-        'Publish a technology roadmap aligned to your three-year business strategy.'
-      ]
+      low: ['Prioritise investment in basic ICT infrastructure including reliable internet connectivity.','Explore mobile-first solutions suited to Zambia\'s connectivity environment.','Begin with low-cost cloud services such as Google Workspace or Microsoft 365.','Conduct an ICT audit to map current infrastructure gaps.','Engage with ZICTA\'s digital inclusion programmes.'],
+      mid: ['Develop a cloud migration roadmap to move critical systems to cloud platforms.','Implement a basic cybersecurity framework including regular backups.','Invest in system integration tools to connect existing siloed platforms.','Introduce a business intelligence tool to enable data-driven reporting.','Consider managed IT services to supplement internal capacity.'],
+      high: ['Explore advanced technologies such as AI-powered analytics and IoT.','Implement Zero Trust security architecture and regular penetration testing.','Leverage big data platforms for real-time operational insights.','Adopt DevOps or Agile IT delivery practices.','Publish a technology roadmap aligned to your business strategy.']
     }
   },
   {
-    id: 'strategy',
-    name: 'Digital Strategy',
+    id: 'strategy', name: 'Digital Strategy', icon: '📋',
     desc: 'Evaluating strategic planning, alignment, and digital roadmap governance',
-    color: '#145A32',
-    bg: '#EAF7F0',
-    icon: '📋',
+    color: '#145A32', bg: '#EAF7F0',
     questions: [
       'Our organisation has a documented and communicated digital transformation strategy.',
-      'Digital transformation initiatives are clearly aligned with our overall business goals and objectives.',
+      'Digital transformation initiatives are clearly aligned with our overall business goals.',
       'We have a dedicated budget specifically allocated for digital transformation projects.',
-      'We set and regularly track clear KPIs (Key Performance Indicators) for digital transformation progress.',
+      'We set and regularly track clear KPIs for digital transformation progress.',
       'Leadership reviews and updates our digital roadmap at least once per year.'
     ],
     recos: {
-      low: [
-        'Develop a concise Digital Transformation Strategy document, even a 5-page plan is a strong starting point.',
-        'Host a leadership workshop to align digital priorities with the organisation\'s top three business goals.',
-        'Ring-fence a minimum digital transformation budget, even modest, to demonstrate commitment.',
-        'Identify one or two quick-win digital projects that can demonstrate early ROI and build momentum.',
-        'Benchmark against similar Zambian organisations to set realistic strategic targets.'
-      ],
-      mid: [
-        'Formalise a Digital Steering Committee with representation from all business units.',
-        'Implement a strategy-on-a-page dashboard visible to all staff showing digital KPIs.',
-        'Align the digital budget with a 3-year investment plan reviewed annually.',
-        'Establish quarterly digital transformation reviews with senior leadership.',
-        'Develop a risk register specifically for digital initiatives.'
-      ],
-      high: [
-        'Explore ecosystem partnerships with fintechs, startups, and universities to co-create innovation.',
-        'Publish a public-facing digital strategy to attract talent, investors, and technology partners.',
-        'Adopt an OKR (Objectives and Key Results) framework for agile digital goal management.',
-        'Link digital transformation KPIs to individual performance contracts across the organisation.',
-        'Conduct annual third-party assessments of digital strategy execution and maturity.'
-      ]
+      low: ['Develop a concise Digital Transformation Strategy document.','Host a leadership workshop to align digital priorities with business goals.','Ring-fence a minimum digital transformation budget.','Identify quick-win digital projects to demonstrate early ROI.','Benchmark against similar Zambian organisations.'],
+      mid: ['Formalise a Digital Steering Committee with cross-business representation.','Implement a strategy dashboard visible to all staff showing digital KPIs.','Align the digital budget with a 3-year investment plan reviewed annually.','Establish quarterly digital transformation reviews with senior leadership.','Develop a risk register specifically for digital initiatives.'],
+      high: ['Explore ecosystem partnerships with fintechs and universities.','Publish a public-facing digital strategy to attract talent and partners.','Adopt an OKR framework for agile digital goal management.','Link digital transformation KPIs to individual performance contracts.','Conduct annual third-party assessments of digital strategy execution.']
     }
   },
   {
-    id: 'leadership',
-    name: 'Leadership & Governance',
+    id: 'leadership', name: 'Leadership & Governance', icon: '👤',
     desc: 'Evaluating executive sponsorship, governance structures, and strategic oversight',
-    color: '#784212',
-    bg: '#FDF2E9',
-    icon: '👤',
+    color: '#784212', bg: '#FDF2E9',
     questions: [
       'Senior leadership actively champions and sponsors digital transformation initiatives.',
       'Leaders communicate a clear and inspiring vision for our digital future to all staff.',
-      'Our organisation has governance structures (e.g., digital committees, policies) to manage digital projects.',
-      'Leadership allocates adequate resources — including time, budget, and staff — for digital initiatives.',
+      'Our organisation has governance structures to manage digital projects effectively.',
+      'Leadership allocates adequate resources for digital initiatives.',
       'Digital performance metrics are reviewed regularly at the executive or board level.'
     ],
     recos: {
-      low: [
-        'Nominate a Digital Transformation Champion at the C-suite or Senior Management level.',
-        'Include digital transformation as a standing agenda item at Board and Senior Management meetings.',
-        'Establish a basic digital governance policy to clarify ownership and accountability.',
-        'Encourage senior leaders to participate in a digital literacy short course.',
-        'Visit or engage a peer organisation in Zambia that has progressed further in digital transformation.'
-      ],
-      mid: [
-        'Create a cross-functional Digital Transformation Committee meeting monthly.',
-        'Develop a Digital Governance Framework covering data, security, project delivery, and vendor management.',
-        'Set digital transformation objectives in leaders\' annual performance agreements.',
-        'Sponsor internal digital innovation challenges to surface ideas from front-line staff.',
-        'Engage an external digital advisor for strategic oversight one to two days per month.'
-      ],
-      high: [
-        'Consider appointing a Chief Digital Officer (CDO) or Chief Technology Officer (CTO).',
-        'Publish an annual digital governance report for accountability to stakeholders.',
-        'Integrate digital risk into the organisation\'s enterprise risk management framework.',
-        'Develop a digital talent pipeline through bursaries and graduate programmes.',
-        'Share your governance model with industry peers to build Zambia\'s collective digital leadership capacity.'
-      ]
+      low: ['Nominate a Digital Transformation Champion at the C-suite level.','Include digital transformation as a standing agenda item at Board meetings.','Establish a basic digital governance policy to clarify ownership.','Encourage senior leaders to participate in a digital literacy short course.','Visit a peer organisation that has progressed further in digital transformation.'],
+      mid: ['Create a cross-functional Digital Transformation Committee meeting monthly.','Develop a Digital Governance Framework covering data, security, and delivery.','Set digital transformation objectives in leaders\' annual performance agreements.','Sponsor internal digital innovation challenges.','Engage an external digital advisor for strategic oversight.'],
+      high: ['Consider appointing a Chief Digital Officer or Chief Technology Officer.','Publish an annual digital governance report for stakeholder accountability.','Integrate digital risk into the enterprise risk management framework.','Develop a digital talent pipeline through bursaries and graduate programmes.','Share your governance model with industry peers.']
     }
   },
   {
-    id: 'culture',
-    name: 'Culture & Change Management',
+    id: 'culture', name: 'Culture & Change Management', icon: '🔄',
     desc: 'Assessing openness to innovation, change adoption, and collaborative working',
-    color: '#78281F',
-    bg: '#F9EBEA',
-    icon: '🔄',
+    color: '#78281F', bg: '#F9EBEA',
     questions: [
-      'Employees are encouraged and empowered to experiment with and adopt new digital technologies.',
+      'Employees are encouraged and empowered to experiment with new digital technologies.',
       'Our organisation has a culture that genuinely embraces change and values innovation.',
-      'Change management practices (e.g., communication plans, training) are applied when new digital tools are introduced.',
-      'Cross-functional teams collaborate effectively on digital projects without significant silos.',
+      'Change management practices are applied when new digital tools are introduced.',
+      'Cross-functional teams collaborate effectively on digital projects without silos.',
       'Employee resistance to digital change is actively identified and managed by leadership.'
     ],
     recos: {
-      low: [
-        'Diagnose the root causes of resistance to change through anonymous staff surveys.',
-        'Launch a Digital Champions Network — peer advocates who champion adoption from within.',
-        'Celebrate small digital wins publicly to shift the culture towards innovation.',
-        'Create safe spaces for experimentation where failure is treated as learning.',
-        'Develop a Change Management Playbook for all future digital deployments.'
-      ],
-      mid: [
-        'Integrate digital transformation communication into routine all-staff communications.',
-        'Adopt a formal change management methodology such as Prosci ADKAR for all major digital projects.',
-        'Incentivise digital adoption through recognition programmes and performance rewards.',
-        'Foster inter-departmental digital collaboration through joint project teams.',
-        'Measure and track digital culture indicators in staff engagement surveys annually.'
-      ],
-      high: [
-        'Embed an innovation operating model with dedicated time and budget for staff-driven digital pilots.',
-        'Establish an internal digital community of practice for knowledge sharing.',
-        'Partner with local universities to bring fresh digital thinking into the organisation.',
-        'Consider agile working practices (sprints, retrospectives) across non-IT business units.',
-        'Publicly position your organisation as a digital-forward employer to attract innovative talent.'
-      ]
+      low: ['Diagnose the root causes of resistance to change through anonymous staff surveys.','Launch a Digital Champions Network of peer advocates.','Celebrate small digital wins publicly to shift culture towards innovation.','Create safe spaces for experimentation where failure is treated as learning.','Develop a Change Management Playbook for all future digital deployments.'],
+      mid: ['Integrate digital transformation communication into routine all-staff updates.','Adopt a formal change management methodology such as Prosci ADKAR.','Incentivise digital adoption through recognition programmes.','Foster inter-departmental digital collaboration through joint project teams.','Measure digital culture indicators in staff engagement surveys annually.'],
+      high: ['Embed an innovation operating model with dedicated time for digital pilots.','Establish an internal digital community of practice for knowledge sharing.','Partner with local universities to bring fresh digital thinking in.','Consider agile working practices across non-IT business units.','Position your organisation as a digital-forward employer.']
     }
   },
   {
-    id: 'skills',
-    name: 'Skills & Talent',
+    id: 'skills', name: 'Skills & Talent', icon: '🎓',
     desc: 'Evaluating digital workforce capability, training investment, and talent development',
-    color: '#4A235A',
-    bg: '#F4ECF7',
-    icon: '🎓',
+    color: '#4A235A', bg: '#F4ECF7',
     questions: [
       'Employees at all levels have sufficient digital skills to perform their current roles effectively.',
-      'Our organisation provides regular, relevant training on new digital tools and technologies.',
-      'We have access to IT specialists and digital experts (in-house or outsourced) when needed.',
-      'There is a clear organisational plan to build digital skills and capabilities across teams.',
+      'Our organisation provides regular training on new digital tools and technologies.',
+      'We have access to IT specialists and digital experts when needed.',
+      'There is a clear organisational plan to build digital skills across teams.',
       'Our organisation can attract or retain digital talent when the need arises.'
     ],
     recos: {
-      low: [
-        'Conduct a Digital Skills Gap Analysis to identify priority training needs across all staff levels.',
-        'Partner with Zambia\'s TEVETA or universities for affordable ICT upskilling programmes.',
-        'Introduce mandatory basic digital literacy training for all staff.',
-        'Develop an intern and graduate programme in partnership with Cavendish University and UNZA.',
-        'Consider outsourcing specialist digital roles (cybersecurity, data analytics) to local IT firms.'
-      ],
-      mid: [
-        'Build a role-specific Digital Skills Competency Framework to guide career progression.',
-        'Invest in online learning platforms (e.g., Coursera, LinkedIn Learning) for self-paced upskilling.',
-        'Develop in-house training programmes led by digitally skilled staff (train the trainer model).',
-        'Create clear career pathways for digital and IT roles to improve retention.',
-        'Track and report on training completion and skill improvement as a KPI.'
-      ],
-      high: [
-        'Develop a Digital Talent Academy to continuously build internal capability.',
-        'Sponsor staff for advanced certifications in cloud, data, AI, and cybersecurity.',
-        'Contribute to Zambia\'s digital skills ecosystem by hosting industry workshops and hackathons.',
-        'Implement a skills succession plan to protect critical digital knowledge.',
-        'Publish a digital talent attraction strategy to compete with private sector and NGO employers.'
-      ]
+      low: ['Conduct a Digital Skills Gap Analysis to identify priority training needs.','Partner with Zambia\'s TEVETA or universities for affordable ICT upskilling.','Introduce mandatory basic digital literacy training for all staff.','Develop an intern and graduate programme in partnership with local universities.','Consider outsourcing specialist digital roles to local IT firms.'],
+      mid: ['Build a role-specific Digital Skills Competency Framework.','Invest in online learning platforms for self-paced upskilling.','Develop in-house training programmes led by digitally skilled staff.','Create clear career pathways for digital and IT roles to improve retention.','Track and report on training completion as a KPI.'],
+      high: ['Develop a Digital Talent Academy to continuously build internal capability.','Sponsor staff for advanced certifications in cloud, data, AI, and cybersecurity.','Contribute to Zambia\'s digital skills ecosystem by hosting hackathons.','Implement a skills succession plan to protect critical digital knowledge.','Publish a digital talent attraction strategy.']
     }
   }
 ];
 
-const LABELS = ['Strongly\nDisagree', 'Disagree', 'Neutral', 'Agree', 'Strongly\nAgree'];
+const LABELS = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
 const TIER_CONFIG = [
-  { min: 0,   max: 39,  label: 'Initial',    color: '#C0392B', desc: 'Digital transformation efforts are minimal or just beginning.' },
-  { min: 40,  max: 54,  label: 'Emerging',   color: '#D4851A', desc: 'Some awareness and early initiatives, but limited implementation.' },
-  { min: 55,  max: 69,  label: 'Developing', color: '#D4AC0D', desc: 'Active efforts underway but inconsistency across dimensions.' },
-  { min: 70,  max: 84,  label: 'Progressing',color: '#1E8449', desc: 'Good digital foundations in place with measurable progress.' },
-  { min: 85,  max: 100, label: 'Leading',    color: '#1A5276', desc: 'Strong digital maturity and transformation capability demonstrated.' }
+  { min: 0,  max: 39,  label: 'Initial',     color: '#C0392B' },
+  { min: 40, max: 54,  label: 'Emerging',    color: '#D4851A' },
+  { min: 55, max: 69,  label: 'Developing',  color: '#D4AC0D' },
+  { min: 70, max: 84,  label: 'Progressing', color: '#1E8449' },
+  { min: 85, max: 100, label: 'Leading',     color: '#1A5276' }
 ];
 
 let currentDim = 0;
 let responses = Array(5).fill(null).map(() => Array(5).fill(null));
+let orgInfo = {};
 
 function getTier(pct) {
   return TIER_CONFIG.find(t => pct >= t.min && pct <= t.max) || TIER_CONFIG[0];
-}
-
-let orgInfo = {};
-
-function startAssessment() {
-  showScreen('screen-orginfo');
-}
-
-function submitOrgInfo() {
-  const org  = document.getElementById('f-org').value.trim();
-  const name = document.getElementById('f-name').value.trim();
-  const errEl = document.getElementById('orginfo-error');
-
-  if (!org || !name) {
-    errEl.textContent = 'Please enter your organisation name and your name before continuing.';
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  orgInfo = {
-    organisation:    org,
-    respondentName:  name,
-    respondentRole:  document.getElementById('f-role').value.trim(),
-    sector:          document.getElementById('f-sector').value,
-    orgSize:         document.getElementById('f-size').value
-  };
-
-  currentDim = 0;
-  responses = Array(5).fill(null).map(() => Array(5).fill(null));
-  showScreen('screen-assess');
-  renderDimension();
-}
-
-async function saveToAPI(payload) {
-  const statusEl = document.getElementById('save-status');
-  statusEl.style.display = 'block';
-  statusEl.style.background = '#EBF5FB';
-  statusEl.style.color = '#1A5276';
-  statusEl.textContent = '⏳ Saving your results to the research database…';
-
-  try {
-    const res = await fetch(API_URL + '/api/assessments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (res.ok && data.success) {
-      statusEl.style.background = '#EAF7F0';
-      statusEl.style.color = '#145A32';
-      statusEl.textContent = '✅ Results saved successfully. Thank you for contributing to this research!';
-    } else {
-      throw new Error(data.error || 'Unknown error');
-    }
-  } catch (err) {
-    statusEl.style.background = '#FDF2E9';
-    statusEl.style.color = '#784212';
-    statusEl.textContent = '⚠️ Could not save to server (results still shown below). Error: ' + err.message;
-  }
 }
 
 function showScreen(id) {
@@ -846,8 +410,31 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
+function submitOrgInfo() {
+  var org  = document.getElementById('f-org').value.trim();
+  var name = document.getElementById('f-name').value.trim();
+  var errEl = document.getElementById('orginfo-error');
+  if (!org || !name) {
+    errEl.textContent = 'Please enter your organisation name and your name before continuing.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  orgInfo = {
+    organisation:   org,
+    respondentName: name,
+    respondentRole: document.getElementById('f-role').value.trim(),
+    sector:         document.getElementById('f-sector').value,
+    orgSize:        document.getElementById('f-size').value
+  };
+  currentDim = 0;
+  responses = Array(5).fill(null).map(() => Array(5).fill(null));
+  showScreen('screen-assess');
+  renderDimension();
+}
+
 function renderDimension() {
-  const d = DIMS[currentDim];
+  var d = DIMS[currentDim];
   document.getElementById('dim-number').textContent = currentDim + 1;
   document.getElementById('dim-name').textContent = d.name;
   document.getElementById('dim-desc').textContent = d.desc;
@@ -857,30 +444,28 @@ function renderDimension() {
   document.getElementById('dim-header').style.borderLeftColor = d.color;
   document.getElementById('dim-number').style.background = d.color;
 
-  const container = document.getElementById('questions-container');
+  var container = document.getElementById('questions-container');
   container.innerHTML = '';
 
-  d.questions.forEach((q, i) => {
-    const card = document.createElement('div');
-    card.className = 'question-card' + (responses[currentDim][i] !== null ? ' answered' : '');
+  d.questions.forEach(function(q, i) {
+    var answered = responses[currentDim][i] !== null;
+    var card = document.createElement('div');
+    card.className = 'question-card' + (answered ? ' answered' : '');
     card.id = 'qcard-' + i;
 
-    let opts = '';
-    for (let v = 1; v <= 5; v++) {
-      const checked = responses[currentDim][i] === v ? 'checked' : '';
-      opts += `<div class="likert-opt">
-        <input type="radio" name="q${currentDim}_${i}" id="q${currentDim}_${i}_${v}" value="${v}" ${checked} onchange="recordAnswer(${i}, ${v})">
-        <label for="q${currentDim}_${i}_${v}">
-          <span class="score-num">${v}</span>
-          <span class="score-lbl">${LABELS[v-1].replace('\n','<br>')}</span>
-        </label>
-      </div>`;
+    var opts = '';
+    for (var v = 1; v <= 5; v++) {
+      var checked = responses[currentDim][i] === v ? 'checked' : '';
+      opts += '<div class="likert-opt">' +
+        '<input type="radio" name="q' + currentDim + '_' + i + '" id="q' + currentDim + '_' + i + '_' + v + '" value="' + v + '" ' + checked + ' onchange="recordAnswer(' + i + ',' + v + ')">' +
+        '<label for="q' + currentDim + '_' + i + '_' + v + '">' +
+        '<span class="score-num">' + v + '</span>' +
+        '<span class="score-lbl">' + LABELS[v - 1] + '</span>' +
+        '</label></div>';
     }
 
-    card.innerHTML = `
-      <div class="question-text"><span class="question-num">Q${currentDim * 5 + i + 1}.</span> ${q}</div>
-      <div class="likert">${opts}</div>
-    `;
+    card.innerHTML = '<div class="question-text"><span class="question-num">Q' + (currentDim * 5 + i + 1) + '.</span> ' + q + '</div>' +
+      '<div class="likert">' + opts + '</div>';
     container.appendChild(card);
   });
 
@@ -891,13 +476,13 @@ function renderDimension() {
 
 function recordAnswer(qIdx, val) {
   responses[currentDim][qIdx] = val;
-  const card = document.getElementById('qcard-' + qIdx);
+  var card = document.getElementById('qcard-' + qIdx);
   if (card) card.classList.add('answered');
   updateNextBtn();
 }
 
 function updateNextBtn() {
-  const allAnswered = responses[currentDim].every(v => v !== null);
+  var allAnswered = responses[currentDim].every(function(v) { return v !== null; });
   document.getElementById('btn-next').disabled = !allAnswered;
 }
 
@@ -919,116 +504,110 @@ function prevDim() {
   }
 }
 
+async function saveToAPI(payload) {
+  var statusEl = document.getElementById('save-status');
+  statusEl.style.display = 'block';
+  statusEl.style.background = '#EBF5FB';
+  statusEl.style.color = '#1A5276';
+  statusEl.textContent = '⏳ Saving your results to the research database…';
+  try {
+    var res = await fetch(API_URL + '/api/assessments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    var data = await res.json();
+    if (res.ok && data.success) {
+      statusEl.style.background = '#EAF7F0';
+      statusEl.style.color = '#145A32';
+      statusEl.textContent = '✅ Results saved successfully. Thank you for contributing to this research!';
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
+  } catch (err) {
+    statusEl.style.background = '#FDF2E9';
+    statusEl.style.color = '#784212';
+    statusEl.textContent = '⚠️ Could not save to server. Your results are still shown below.';
+  }
+}
+
 function showResults() {
   showScreen('screen-results');
-  document.getElementById('result-date').textContent = new Date().toLocaleDateString('en-ZM', { year:'numeric', month:'long', day:'numeric' });
-  document.getElementById('org-name-display').innerHTML = '<strong>' + orgInfo.organisation + '</strong> &mdash; <span id="result-date"></span>';
 
-  const dimScores = responses.map(dimR => dimR.reduce((a, b) => a + b, 0));
-  const total = dimScores.reduce((a, b) => a + b, 0);
-  const totalPct = Math.round(total / 125 * 100);
-  const tier = getTier(totalPct);
+  var dimScores = responses.map(function(dimR) { return dimR.reduce(function(a, b) { return a + b; }, 0); });
+  var total = dimScores.reduce(function(a, b) { return a + b; }, 0);
+  var totalPct = Math.round(total / 125 * 100);
+  var tier = getTier(totalPct);
 
   document.getElementById('total-score-display').textContent = total;
   document.getElementById('tier-display').textContent = tier.label;
+  document.getElementById('org-name-display').textContent = orgInfo.organisation + ' — ' + new Date().toLocaleDateString('en-ZM', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  // Save to API
-  saveToAPI({
-    ...orgInfo,
-    responses
-  });
+  saveToAPI(Object.assign({}, orgInfo, { responses: responses }));
 
-  // Dim bars
-  const dimBarsEl = document.getElementById('dim-bars');
-  const dimColors = ['#1A5276','#145A32','#784212','#78281F','#4A235A'];
+  var dimColors = ['#1A5276', '#145A32', '#784212', '#78281F', '#4A235A'];
+  var dimBarsEl = document.getElementById('dim-bars');
   dimBarsEl.innerHTML = '';
-  DIMS.forEach((d, i) => {
-    const pct = Math.round(dimScores[i] / 25 * 100);
-    dimBarsEl.innerHTML += `
-      <div class="dim-score-row">
-        <div class="dim-score-name">${d.icon} ${d.name.split(' ')[0]}</div>
-        <div class="dim-score-bar-track">
-          <div class="dim-score-bar-fill" style="width:${pct}%; background:${dimColors[i]};"></div>
-        </div>
-        <div class="dim-score-pct" style="color:${dimColors[i]};">${pct}%</div>
-      </div>
-    `;
+  DIMS.forEach(function(d, i) {
+    var pct = Math.round(dimScores[i] / 25 * 100);
+    dimBarsEl.innerHTML += '<div class="dim-score-row">' +
+      '<div class="dim-score-name">' + d.icon + ' ' + d.name.split(' ')[0] + '</div>' +
+      '<div class="dim-score-bar-track"><div class="dim-score-bar-fill" style="width:' + pct + '%;background:' + dimColors[i] + ';"></div></div>' +
+      '<div class="dim-score-pct" style="color:' + dimColors[i] + ';">' + pct + '%</div></div>';
   });
 
-  // Radar chart
-  setTimeout(() => {
-    const ctx = document.getElementById('radarChart').getContext('2d');
+  setTimeout(function() {
+    var ctx = document.getElementById('radarChart').getContext('2d');
     new Chart(ctx, {
       type: 'radar',
       data: {
         labels: ['Technology', 'Strategy', 'Leadership', 'Culture', 'Skills'],
         datasets: [{
           label: 'Your Score',
-          data: dimScores.map(s => Math.round(s / 25 * 100)),
+          data: dimScores.map(function(s) { return Math.round(s / 25 * 100); }),
           backgroundColor: 'rgba(26,60,94,0.15)',
           borderColor: '#1A3C5E',
           borderWidth: 2,
           pointBackgroundColor: '#2E6EA6',
-          pointRadius: 5,
-          pointHoverRadius: 7
+          pointRadius: 5
         }]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: {
-          r: {
-            beginAtZero: true,
-            max: 100,
-            ticks: { stepSize: 25, font: { size: 10 } },
-            pointLabels: { font: { size: 11, weight: 'bold' } },
-            grid: { color: 'rgba(0,0,0,0.08)' }
-          }
-        }
+        scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 25 } } }
       }
     });
   }, 100);
 
-  // Framework grid
-  const fwGrid = document.getElementById('fw-grid');
+  var fwGrid = document.getElementById('fw-grid');
   fwGrid.innerHTML = '';
-  DIMS.forEach((d, i) => {
-    const pct = Math.round(dimScores[i] / 25 * 100);
-    fwGrid.innerHTML += `
-      <div class="fw-pillar" style="background:${d.bg};">
-        <div class="fw-icon">${d.icon}</div>
-        <div class="fw-name" style="color:${d.color};">${d.name.split(' ').slice(0,2).join(' ')}</div>
-        <div class="fw-pct" style="color:${d.color};">${pct}%</div>
-      </div>
-    `;
+  DIMS.forEach(function(d, i) {
+    var pct = Math.round(dimScores[i] / 25 * 100);
+    fwGrid.innerHTML += '<div class="fw-pillar" style="background:' + d.bg + ';">' +
+      '<div class="fw-icon">' + d.icon + '</div>' +
+      '<div class="fw-name" style="color:' + d.color + ';">' + d.name.split(' ').slice(0, 2).join(' ') + '</div>' +
+      '<div class="fw-pct" style="color:' + d.color + ';">' + pct + '%</div></div>';
   });
 
-  // Recommendations — sorted by lowest score first
-  const sorted = DIMS.map((d, i) => ({ d, i, pct: Math.round(dimScores[i] / 25 * 100) }))
-    .sort((a, b) => a.pct - b.pct);
+  var sorted = DIMS.map(function(d, i) { return { d: d, i: i, pct: Math.round(dimScores[i] / 25 * 100) }; })
+    .sort(function(a, b) { return a.pct - b.pct; });
 
-  const recoEl = document.getElementById('recommendations');
-  recoEl.innerHTML = '';
-  sorted.forEach(({ d, i, pct }) => {
-    const level = pct < 40 ? 'low' : pct < 70 ? 'mid' : 'high';
-    const badgeText = pct < 40 ? 'Needs Focus' : pct < 70 ? 'Developing' : 'Strong';
-    const badgeBg = pct < 40 ? '#FDEDEC' : pct < 70 ? '#FEF9E7' : '#EAFAF1';
-    const badgeColor = pct < 40 ? '#C0392B' : pct < 70 ? '#B7770D' : '#1E8449';
-    const recos = d.recos[level];
-
-    recoEl.innerHTML += `
-      <div class="reco-card">
-        <div class="reco-card-header">
-          <div class="reco-badge" style="background:${badgeBg};color:${badgeColor};">${badgeText}</div>
-          <div class="reco-dim-name">${d.icon} ${d.name}</div>
-          <div class="reco-score">${pct}%</div>
-        </div>
-        <ul class="reco-items">
-          ${recos.slice(0, 4).map(r => `<li>${r}</li>`).join('')}
-        </ul>
-      </div>
-    `;
+  var recoEl = document.getElementById('recommendations');
+  recoEl.innerHTML = '<h3 style="font-size:16px;font-weight:700;color:var(--primary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.05em;">Tailored Recommendations</h3>';
+  sorted.forEach(function(item) {
+    var pct = item.pct;
+    var level = pct < 40 ? 'low' : pct < 70 ? 'mid' : 'high';
+    var badgeText = pct < 40 ? 'Needs Focus' : pct < 70 ? 'Developing' : 'Strong';
+    var badgeBg = pct < 40 ? '#FDEDEC' : pct < 70 ? '#FEF9E7' : '#EAFAF1';
+    var badgeColor = pct < 40 ? '#C0392B' : pct < 70 ? '#B7770D' : '#1E8449';
+    var recos = item.d.recos[level];
+    recoEl.innerHTML += '<div class="reco-card">' +
+      '<div class="reco-card-header">' +
+      '<div class="reco-badge" style="background:' + badgeBg + ';color:' + badgeColor + ';">' + badgeText + '</div>' +
+      '<div class="reco-dim-name">' + item.d.icon + ' ' + item.d.name + '</div>' +
+      '<div class="reco-score">' + pct + '%</div></div>' +
+      '<ul class="reco-items">' + recos.slice(0, 4).map(function(r) { return '<li>' + r + '</li>'; }).join('') + '</ul></div>';
   });
 }
 
